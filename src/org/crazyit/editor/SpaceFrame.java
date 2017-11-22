@@ -4,6 +4,9 @@ import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -75,8 +78,37 @@ public class SpaceFrame extends JFrame {
 		chosePanel.add(pathText);
 		chosePanel.add(choseButton);
 		mainPanel.add(chosePanel);
-
 		confirmButton.setEnabled(false);
+		
+		FileInputStream fis = null;
+		String workSpacePath = ""; 
+		try{
+			File importantFile = new File("important");
+			if(importantFile.exists()){
+				String p = importantFile.getAbsolutePath();
+				fis = new FileInputStream(importantFile);
+				byte[] pathByte = new byte[(int) importantFile.length()];
+				fis.read(pathByte);
+				workSpacePath = new String(pathByte);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(fis != null){
+				try{
+					fis.close();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+		if(workSpacePath != null && !"".equals(workSpacePath)){
+			pathText.setText(workSpacePath);
+			confirmButton.setEnabled(true);
+			//获取用户选择的文件
+			File folder = new File(workSpacePath);
+			this.setFolder(folder); 
+		}
 		//为确定按钮添加确定的事件, 即创建一个WorkSpace对象
 		confirmButton.addActionListener(new ConfirmButtonListener(this, editorFrame));
 		buttonPanel.add(confirmButton);
@@ -137,6 +169,33 @@ class ConfirmButtonListener implements ActionListener {
 		editorFrame.setSize(900, 600);
 		//让工作选择空间界面不可见
 		spaceFrame.setVisible(false);
+		FileOutputStream fos = null;
+		try{
+			File file = spaceFrame.getFolder();
+			if(file != null){
+				String workSpacePath = "";
+				workSpacePath = file.getAbsolutePath();
+				File importantFile = new File("important");
+				if(!importantFile.exists()){
+					importantFile.createNewFile();
+				}
+				if(workSpacePath != null && !"".equals(workSpacePath)){
+					fos = new FileOutputStream(importantFile);
+					fos.write(workSpacePath.getBytes());
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(fos != null){
+				try {
+					fos.close();
+				} catch (IOException  e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }
 

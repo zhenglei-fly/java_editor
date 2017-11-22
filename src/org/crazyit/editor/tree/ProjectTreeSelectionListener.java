@@ -3,6 +3,7 @@ package org.crazyit.editor.tree;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JPopupMenu;
 import javax.swing.event.TreeSelectionEvent;
 
 import org.crazyit.editor.EditorFrame;
@@ -27,6 +28,16 @@ public class ProjectTreeSelectionListener extends MouseAdapter {
 	}
 
 	public void mousePressed(MouseEvent e) {
+		if(e.getButton() == MouseEvent.BUTTON3){
+			final JPopupMenu jp = new JPopupMenu();
+	        jp.add("打开");
+	        jp.add("保存");
+	        jp.add("刷新");
+	        int x = e.getX();
+	        int y = e.getY();
+	        jp.show(editorFrame, e.getX() + 20, e.getY() + 50);
+			return;
+		}
 		//得到当前所选择的节点
 		ProjectTreeNode selectNode = this.editorFrame.getSelectNode();
 		//如果没有选择节点，就返回

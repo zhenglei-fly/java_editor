@@ -5,6 +5,6 @@ target/
 .project
 .externalToolBuilders
 *.iml
-bin
+/bin
 important
 *.class
