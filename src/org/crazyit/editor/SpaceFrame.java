@@ -1,5 +1,7 @@
 package org.crazyit.editor;
 
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,8 +32,13 @@ import org.crazyit.editor.commons.WorkSpace;
 public class SpaceFrame extends JFrame {
 
 	private JPanel mainPanel;
-	
+
+	private JPanel infoPanel;
 	private JLabel infoLabel;
+	private JLabel infoLabel2;
+	private JLabel infoLabel3;
+	
+	private JPanel nullPanel;
 	
 	private JPanel chosePanel;
 	
@@ -57,19 +64,30 @@ public class SpaceFrame extends JFrame {
 	
 	public SpaceFrame(EditorFrame editorFrame) {
 		mainPanel = new JPanel();
-		infoLabel = new JLabel("请选择工作空间");
+		infoPanel = new JPanel();
+		infoLabel = new JLabel("Select a workspace");
+		infoLabel2 = new JLabel("Java-editor stores your projects in a folder called a workspace.");
+		infoLabel3 = new JLabel("Choose a workspace folder to use for this session.");
+		nullPanel = new JPanel();
+		nullPanel.setPreferredSize(new Dimension(300, 50));//关键代码,设置JPanel的大小
 		chosePanel = new JPanel();
-		workTextLabel = new JLabel("工作空间: ");
+		workTextLabel = new JLabel("Workspace: ");
 		pathText = new JTextField("", 40);
-		choseButton = new JButton("选择");
+		choseButton = new JButton("Browse...");
 		buttonPanel = new JPanel();
-		confirmButton = new JButton("确定");
-		cancelButton = new JButton("取消");
+		confirmButton = new JButton("OK");
+		cancelButton = new JButton("Cancel");
 		chooser = new SpaceChooser(this);
 		
+		infoPanel.setLayout(new GridLayout(3,1));
+		infoPanel.add(infoLabel);
+		infoPanel.add(infoLabel2);
+		infoPanel.add(infoLabel3);
+		infoPanel.setSize(50,200);
 		//设置主Panel的布局
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.add(infoLabel);
+		mainPanel.add(infoPanel);
+		mainPanel.add(nullPanel);
 		//设置选择区的布局
 		chosePanel.setLayout(new BoxLayout(chosePanel, BoxLayout.X_AXIS));
 		choseButton.addActionListener(new ChoseButtonListener(chooser));
@@ -122,6 +140,7 @@ public class SpaceFrame extends JFrame {
 		});
 		mainPanel.add(buttonPanel);
 		add(mainPanel);
+		this.setTitle("Workspace Launcher");
 		pack();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocation(300, 200);
